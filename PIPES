@@ -1,0 +1,65 @@
+pipeline{
+    agent any
+     environment{
+         name12='GAURAV'
+     }
+     parameters {
+        string(name: 'Person', defaultValue: 'SUNNY', description: 'Who are you')
+        booleanParam(name: 'Male', defaultValue: '', description: '')
+        choice(name: 'CITY', choices: ['Jaipur','Aligarh','Agra' ], description: '')
+     }    
+        stages{
+            stage(TEST){
+                steps{
+                    echo 'HELLO TESTING'
+                    bat''' dir
+                    cd
+                    date /T
+                    echo %name12%
+                    echo %Person%
+                    echo %Male%
+                    echo %CITY%
+                    
+                    '''
+                    
+                }
+            }
+            stage(BUILD){
+            environment{
+                name1='SUNNY'
+            }    
+                steps{
+                    bat ''' echo 'HELLO BUILD'
+                    echo %name1%
+                    '''
+                }
+            }
+            stage(DEPLOYE_TEST){
+                steps{
+                    echo 'DEPLOY TESTING'
+                }
+            }
+            stage(DEPLOY_PROD){
+             input{
+                 message "Should we continue"
+                 ok "Yes/continue"
+             }    
+                steps{
+                    echo 'DEPLOY PROD'
+                    bat 'echo %name12%'
+                }
+            }
+        }
+   post{
+       always{
+           echo 'DONE'
+       }
+       success{
+           echo 'SUCCESS'
+       }
+       failure{
+           echo 'FAIL'
+       }
+   }
+
+}
